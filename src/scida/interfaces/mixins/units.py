@@ -507,7 +507,7 @@ class UnitMixin(Mixin):
                     except ValueError as e:
                         if str(e) != "Could not find units.":
                             raise e
-                        print("Hint: Did you pass a unit file? Is it complete?")
+                        log.info("Hint: Did you pass a unit file? Is it complete?")
                         raise ValueError("Could not find units for '%s'" % path)
 
                     # we do not want any pint decorated objects for index fields
@@ -616,13 +616,13 @@ class UnitMixin(Mixin):
         success_states = [UnitState.success, UnitState.success_none]
         count = len([k for k, v in self._unitstates.items() if v not in success_states])
         if count > 0:
-            print("Missing units for %d fields." % count)
+            log.warning("Missing units for %d fields." % count)
             if verbose:
-                print("Fields with missing units:")
+                log.info("Fields with missing units:")
                 for k, v in self._unitstates.items():
                     if v not in success_states:
-                        print("  - %s (%s)" % (k, v.name))
-            print(
+                        log.info("  - %s (%s)" % (k, v.name))
+            log.info(
                 "Re-run with\n\t>>> import logging\n\t>>> logging.getLogger().setLevel(logging.DEBUG)\n"
                 "to learn more."
             )
@@ -759,7 +759,7 @@ def check_missing_units(unit, missing_units, path, logger=log):
         if missing_units == "raise":
             raise ValueError(msg)
         elif missing_units == "warn":
-            logger.info(msg)
+            logger.debug(msg)
         elif missing_units == "ignore":
             pass
         else:
