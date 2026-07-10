@@ -7,6 +7,7 @@ from __future__ import annotations
 import importlib.resources
 import os
 import pathlib
+import warnings
 from collections.abc import Callable
 from typing import Any, cast
 
@@ -69,7 +70,7 @@ def get_config(reload: bool = False, update_global=True) -> dict:
         return _conf
     config = get_config_fromfile(path)
     if config.get("copied_default", False):
-        print(
+        warnings.warn(
             "Warning! Using default configuration. Please adjust/replace in '%s'."
             % path
         )

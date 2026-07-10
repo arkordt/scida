@@ -47,13 +47,13 @@ class SpatialCartesian3DMixin(Spatial3DMixin):
             bs = self.header["BoxSize"]
         except KeyError:
             bs = None
-            print("Info: Cannot determine boxsize.")
+            log.exception("Cannot determine boxsize")
         is_cubical = isinstance(bs, np.ndarray) and np.all(bs == bs[0])
         if isinstance(bs, float) or is_cubical:
             self.boxsize[:] = bs
         elif bs is not None:
             # Have not thought about non-cubic cases yet.
-            print("Boxsize:", bs)
+            log.warning("Boxsize %s is non-cubic which is not supported", bs)
             raise NotImplementedError
         common_coord_names = ["Coordinates", "Position", "GroupPos", "SubhaloPos"]
         if "CoordinatesName" not in self.hints:
