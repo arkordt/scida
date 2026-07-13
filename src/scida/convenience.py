@@ -208,7 +208,7 @@ def find_path(path, overwrite=False) -> str:
             # dataset on the internet
             savepath = config.get("download_path", None)
             if savepath is None:
-                print(
+                log.info(
                     "Have not specified 'download_path' in config. Using 'cache_path' instead."
                 )
                 savepath = config.get("cache_path")

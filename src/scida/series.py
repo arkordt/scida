@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import inspect
 import json
+import logging
 import os
 from pathlib import Path
 from typing import Any
@@ -21,6 +22,8 @@ from scida.interface import create_datasetclass_with_mixins
 from scida.io import load_metadata
 from scida.misc import map_interface_args, return_cachefile_path
 from scida.registries import dataseries_type_registry
+
+log = logging.getLogger(__name__)
 
 
 def delay_init(cls):
@@ -152,7 +155,7 @@ class DatasetSeries(object):
         self.datasets = [dec(datasetclass)(p, *a, **kw) for p, a, kw in gen]
 
         if self.metadata is None:
-            print("Have not cached this data series. Can take a while.")
+            log.info("Have not cached this data series. Can take a while.")
             dct = {}
             for i, (path, d) in enumerate(
                 tqdm(zip(self.paths, self.datasets), total=len(self.paths))
@@ -515,7 +518,7 @@ class DatasetSeries(object):
                 try:
                     return json.JSONEncoder.default(self, obj)
                 except TypeError as e:
-                    print("obj failing json encoding:", obj)
+                    log.exception("obj failing json encoding: %s", obj)
                     raise e
 
         self._metadata = dct
